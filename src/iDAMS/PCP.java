@@ -11,7 +11,7 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.util.ContextUtils;
 
-public class PCP {
+public class PCP implements Provider {
 	
 	public String id; // Identifier of provider
 	double busy_time; // Total number of busy time serving
