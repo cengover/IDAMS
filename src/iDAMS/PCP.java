@@ -1,7 +1,8 @@
 package iDAMS;
 
+import iDAMS.ACO.Bill;
+import iDAMS.ACO.BillType;
 import java.util.LinkedList;
-
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.Schedule;
@@ -13,28 +14,27 @@ import repast.simphony.util.ContextUtils;
 
 public class PCP implements Provider {
 	
-	public String id; // Identifier of provider
-	double busy_time; // Total number of busy time serving
-	double service_cost; // Total service cost
+	public int id; // Identifier of provider
 	double intervention_budget; // Cumulative intervention cost
 	int total_patients; // Cumulative number of patients served
 	int distinct_patients; // Distinct number of patients who are served
 	// List of patients in the line
 	public LinkedList<Bene> cList;
+	public ACO aco;
+
 	
-	public PCP(String id){
+	public PCP(int id, ACO a){
 		
-		//Parameters p = RunEnvironment.getInstance().getParameters();
+		Parameters p = RunEnvironment.getInstance().getParameters();
 		this.id = id;
-		this.busy_time = 0;
-		this.service_cost = 0;
 		this.intervention_budget = 0;
 		this.total_patients = 0;
 		this.distinct_patients = 0;
 		this.cList = new LinkedList<Bene>();
+		this.aco = a;
 	}
 	
-	// Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent classes.
+	// Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
 	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 0)
 	public void step(){
 		
@@ -46,62 +46,56 @@ public class PCP implements Provider {
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		// If queue is not empty
-		if (this.cList.size() > 0){
+		while (this.cList.size() > 0){
 			// Serve the first patient in the queue
 			Bene patient = this.cList.getFirst();
-			discharge(patient);
+			patient.health = 0;
+			// Assign interventions
+			if (RandomHelper.nextDoubleFromTo(0, 1)<aco.offline_rate){
+				
+				aco.bill(patient, this, aco.offline_cost, BillType.offline);
+				patient.interventionList.add(new Intervention(this,interventionType.offline));
+			}
+			if (RandomHelper.nextDoubleFromTo(0, 1)<this.aco.online_rate){
+				
+				aco.bill(patient, this, aco.online_cost, BillType.online);
+				if(RandomHelper.nextDoubleFromTo(0, 1)<p.getDouble("reachability")){
+					
+					patient.interventionList.add(new Intervention(this,interventionType.online));
+				}
+			}
+			if (RandomHelper.nextDoubleFromTo(0, 1)<this.aco.onsite_rate){
+				
+				aco.bill(patient, this, aco.onsite_cost, BillType.onsite);
+				if (RandomHelper.nextDoubleFromTo(0, 1)<p.getDouble("attendance_rate")){
+					
+					patient.interventionList.add(new Intervention(this,interventionType.onsite));
+				}			
+			}
+			// Kill Bene
+			if (patient.visits>5){//*****************************************************************************************
+				
+				context.remove(patient);
+				
+			}
+			this.cList.removeFirst();
 		}
 		
-		// Print state variables at termination of the simulation.
-		if (schedule.getTickCount() == (Integer)p.getValue("endOfSim")){
-			
-			// Print out and end Run 
-			Bene bene = new Bene(" ");
-			PCP pcp = new PCP(" ");
-			for (Object o: grid.getObjects()){
-				
-				if(o instanceof Bene){
-					bene = (Bene)o;
-					System.out.println(bene.id+" "+bene.health+" "+bene.lifestyle+" "+bene.t_queue+" "+bene.t_cum+" "+bene.duration);
-				}	
-			}
-			for (Object o: grid.getObjects()){
-				
-				if(o instanceof PCP){
-					pcp = (PCP)o;
-					System.out.println(pcp.id+" "+pcp.total_patients+" "+pcp.distinct_patients+" "+pcp.busy_time+" "+pcp.service_cost+" "+pcp.intervention_budget
-							+" "+pcp.cList.size());
-				}	
-			}	
-		}
 		RunEnvironment.getInstance().endAt((Integer)p.getValue("endOfSim"));	
 	}
-	// Discharge Function
-	void discharge(Bene b){
+	public class Intervention {
 		
-		Schedule schedule= (Schedule) RunEnvironment.getInstance().getCurrentSchedule();
-		if(b.diagnosed == 0){
-			
-			this.distinct_patients += 1;
+		public PCP provider;
+		public interventionType intType;
+		
+		public Intervention(PCP provider, interventionType cType) {
+			this.provider = provider;
+			this.intType = cType;
 		}
-		this.total_patients+=1;
-		this.service_cost = this.service_cost + b.health*(b.insurance+1.0);
-		this.busy_time=this.busy_time+1.0;
-		// Changes to the patient
-		b.t_queue = b.t_queue + (schedule.getTickCount() - b.t_entry);
-		double r = RandomHelper.nextDoubleFromTo(0, 1);
-		if (r < 0.2){
-			
-			b.intervention = 1;
-			this.intervention_budget = this.intervention_budget + 0.1;
-		}
-		b.diagnosed = 1;
-		b.hospitalized = 0;
-		b.lifestyle = 0;
-		if (b.health == 1){
-			
-			b.health = 0;
-		}
-		this.cList.removeFirst();
+	}
+	public enum interventionType {
+		offline,
+		online,
+		onsite
 	}
 }

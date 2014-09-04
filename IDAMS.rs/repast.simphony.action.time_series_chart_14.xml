@@ -1,0 +1,36 @@
+<repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
+  <name>Total Cost over Time</name>
+  <dataSet>Total Cost</dataSet>
+  <xAxisLabel>Time Tick</xAxisLabel>
+  <yAxisLabel>Total Cost</yAxisLabel>
+  <chartTitle>Total Cost Over Time</chartTitle>
+  <type>TIME_SERIES</type>
+  <background class="javax.swing.plaf.ColorUIResource">
+    <value>-1</value>
+    <falpha>0.0</falpha>
+  </background>
+  <gridLineColor>
+    <red>204</red>
+    <green>204</green>
+    <blue>204</blue>
+    <alpha>255</alpha>
+  </gridLineColor>
+  <showGrid>true</showGrid>
+  <showLegend>true</showLegend>
+  <seriesIds>
+    <entry>
+      <string>Total Cost</string>
+      <SeriesData>
+        <label>Total Cost</label>
+        <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>255</blue>
+          <alpha>255</alpha>
+        </color>
+      </SeriesData>
+    </entry>
+  </seriesIds>
+  <dataValueIds/>
+  <plotRangeLength>-1</plotRangeLength>
+</repast.simphony.chart2.engine.TimeSeriesChartDescriptor>

@@ -35,28 +35,43 @@ public class iDAMSModel implements ContextBuilder<Object>{
 		Network<Object> sNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"socialNetwork", context, false);
 		
-		// Create the social Network
+		// Create the Bene-Provider Network
 		Network<Object> b2pNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"bene2PCPNetwork", context, false);
+		
+		// Create the initial ACO and add to the context.
+		ACO aco = new ACO(1);
+		context.add(aco);
+		grid.moveTo(aco, 0,0);
 			
 		// Create the initial benes and add to the context. 
 		for(int i = 0; i < benes; i++){
 			
-			Bene bene = new Bene("Bene-"+ i);
+			Bene bene = new Bene(i);
 			context.add(bene);
-			grid.moveTo(bene, 0,0);
+			grid.moveTo(bene, 1,0);
 		}
+		
 		// Create the initial PCPs and add to the context. 
 		for(int i = 0; i < PCPs; i++){
 			
-			PCP pcp = new PCP("PCP-"+ i);
+			PCP pcp = new PCP(i,aco);
+			aco.pcpList.add(pcp);
 			context.add(pcp);
-			grid.moveTo(pcp, 0,1);
+			grid.moveTo(pcp, 2,0);
 		}
 		// Random Directed Graph among bene population
-		Bene source = new Bene(" ");
-		Bene target = new Bene(" ");
-		for (Object o: grid.getObjectsAt(0,0)){
+		randomStaticSocialNetwork(grid, sNetwork, links);
+		// Connect benes and providers
+		randomStaticBeneProviderNetwork(grid, b2pNetwork);
+		return context;			
+	}
+	// Random Directed Graph among bene population
+	public void randomStaticSocialNetwork(Grid grid,Network sNetwork, int links){
+		
+		Bene source = new Bene(1);
+		Bene target = new Bene(1);
+		for (Object o: grid.getObjectsAt(1,0)){
 			
 			if (o instanceof Bene){
 				source = (Bene)o;
@@ -64,14 +79,12 @@ public class iDAMSModel implements ContextBuilder<Object>{
 				int con = 0;
 				while (con < links){
 					// Get a bene object
-					Object t = grid.getRandomObjectAt(0,0);
+					Object t = grid.getRandomObjectAt(1,0);
 					if (t instanceof Bene){
 						target = (Bene)t;
-						//System.out.println(source.id+" "+target.id);
 						// If selected agent is not a neighbor and itself
 						if (((Bene) o).sList.contains(t) == false && source!=target){
 							
-							//System.out.println(source.id+" "+target.id);
 							sNetwork.addEdge(source, target);
 							((Bene) source).sList.add((Bene) target);
 							con++;
@@ -80,12 +93,15 @@ public class iDAMSModel implements ContextBuilder<Object>{
 				}						
 			}
 		}
-		// Connect benes and providers
+	}
+	// Random Graph among benes and providers
+	public void randomStaticBeneProviderNetwork(Grid grid,Network b2pNetwork){
+		
 		for (Object o: grid.getObjects()){
 			
 			if (o instanceof Bene){
 				
-				for (Object pro: grid.getObjects()){
+				for (Object pro: grid.getObjectsAt(2,0)){
 					
 					if (pro instanceof PCP){
 						
@@ -95,6 +111,5 @@ public class iDAMSModel implements ContextBuilder<Object>{
 				}
 			}
 		}
-		return context;			
 	}
 }

@@ -1,3 +1,5 @@
-<context id="IDAMS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://repast.org/scenario/context">
-  	
+<context id="IDAMS">
+	<projection type="grid" id="grid"></projection>
+	<projection type="network" id="socialNetwork"></projection>
+	<projection type="network" id="bene2PCPNetwork"></projection>
 </context>
