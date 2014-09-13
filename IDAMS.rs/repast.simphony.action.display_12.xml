@@ -1,71 +1,59 @@
 <repast.simphony.visualization.engine.CartesianDisplayDescriptor>
-  <name>Bene-Provider</name>
+  <name>New Display</name>
   <type>3D</type>
   <styles>
     <entry>
       <string>iDAMS.Bene</string>
-      <string>repast.simphony.visualization.editedStyle.EditedStyle3D</string>
-    </entry>
-    <entry>
-      <string>iDAMS.PCP</string>
-      <string>repast.simphony.visualization.editedStyle.EditedStyle3D</string>
+      <string>repast.simphony.visualization.visualization3D.style.DefaultStyle3D</string>
     </entry>
   </styles>
   <editedStyles>
     <entry>
       <string>iDAMS.Bene</string>
-      <string>iDAMS.Bene.style_1.xml</string>
-    </entry>
-    <entry>
-      <string>iDAMS.PCP</string>
-      <string>iDAMS.PCP.style_1.xml</string>
+      <null/>
     </entry>
   </editedStyles>
   <netStyles>
     <entry>
-      <string>bene2PCPNetwork</string>
-      <string>repast.simphony.visualization.editedStyle.EditedEdgeStyle3D</string>
+      <string>socialNetwork</string>
+      <string>repast.simphony.visualization.visualization3D.style.DefaultEdgeStyle3D</string>
     </entry>
   </netStyles>
   <editedNetStyles>
     <entry>
-      <string>bene2PCPNetwork</string>
-      <string>bene2PCPNetwork.style_2.xml</string>
+      <string>socialNetwork</string>
+      <null/>
     </entry>
   </editedNetStyles>
   <frequency>ON_NEW</frequency>
   <schedParams>
     <start>1.0</start>
-    <interval>1.0</interval>
+    <interval>0.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
-    <frequency>REPEAT</frequency>
-    <hashCode>833674043</hashCode>
+    <frequency>ONE_TIME</frequency>
+    <hashCode>1833651906</hashCode>
   </schedParams>
-  <layoutClassName>repast.simphony.visualization.visualization3D.layout.Random3DLayout</layoutClassName>
-  <layoutProjection>bene2PCPNetwork</layoutProjection>
+  <layoutClassName>repast.simphony.visualization.visualization3D.layout.GEM3DLayout</layoutClassName>
+  <layoutProjection>socialNetwork</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
       <string>iDAMS.Bene</string>
-      <int>1</int>
-    </entry>
-    <entry>
-      <string>iDAMS.PCP</string>
       <int>0</int>
     </entry>
   </layerOrder>
   <projections>
     <repast.simphony.scenario.data.ProjectionData>
-      <id>bene2PCPNetwork</id>
+      <id>socialNetwork</id>
       <attributes/>
       <type>network</type>
     </repast.simphony.scenario.data.ProjectionData>
   </projections>
   <projectionDescriptors>
     <entry>
-      <string>bene2PCPNetwork</string>
+      <string>socialNetwork</string>
       <repast.simphony.visualization.engine.DefaultProjectionDescriptor>
         <proj reference="../../../../projections/repast.simphony.scenario.data.ProjectionData"/>
         <props/>

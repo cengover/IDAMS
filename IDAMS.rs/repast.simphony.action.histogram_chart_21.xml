@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.HistogramChartDescriptor>
-  <name>Behavior Distribution Termination</name>
-  <dataSet>Behavior per person</dataSet>
+  <name>Behavior Distribution Start</name>
+  <dataSet>Behavior per person start</dataSet>
   <xAxisLabel>Behavior</xAxisLabel>
-  <yAxisLabel>Number of Benes</yAxisLabel>
-  <chartTitle>Behavior Distribution at Termination</chartTitle>
+  <yAxisLabel>Number of Patients</yAxisLabel>
+  <chartTitle>Behavior Distribution at Start</chartTitle>
   <type>HISTOGRAM</type>
   <background>
     <red>192</red>
@@ -19,12 +19,12 @@
   </gridLineColor>
   <showGrid>true</showGrid>
   <showLegend>true</showLegend>
-  <histType>DYNAMIC</histType>
+  <histType>STATIC</histType>
   <binCount>10</binCount>
-  <sourceId>behaviorPerPerson</sourceId>
+  <sourceId>Behavior</sourceId>
   <outOfRange>IGNORE</outOfRange>
   <min>0.0</min>
-  <max>0.0</max>
+  <max>1.0</max>
   <barColor>
     <red>255</red>
     <green>0</green>

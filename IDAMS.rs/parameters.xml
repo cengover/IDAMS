@@ -5,18 +5,23 @@
 	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="100" />
 	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="1" />
 	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="3" />
-	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="2" />
-	<parameter name="numOfPCPs" displayName="Number of PCPs" type="int" defaultValue="2" />
+	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="0" />
+	<parameter name="numOfPCPs" displayName="Number of Providers" type="int" defaultValue="1" />
 	<parameter name="endOfSim" displayName="Terminating Time tick" type="int" defaultValue="200" />
-	<parameter name="offline_rate" displayName="Text,e-mail etc." type="double" defaultValue="0.5" />
-	<parameter name="online_rate" displayName="Tele-monitoring" type="double" defaultValue="0.3" />
-	<parameter name="onsite_rate" displayName="Onsite Education" type="double" defaultValue="0.1" />
-	<parameter name="max_threshold" displayName="Maximum Threshold" type="double" defaultValue="1.0" />
-	<parameter name="min_threshold" displayName="Minimum Threshold" type="double" defaultValue="0.5" />
-	<parameter name="offline_cost" displayName="Cost-Text,e-mail etc." type="double" defaultValue="1.0" />
-	<parameter name="online_cost" displayName="Cost Tele-monitoring" type="double" defaultValue="5.0" />
-	<parameter name="onsite_cost" displayName="Cost Onsite Education" type="double" defaultValue="20.0" />
-	<parameter name="reachability" displayName="Successrate of Telemonitoring" type="double" defaultValue="0.5" />
-	<parameter name="attendance_rate" displayName="Attendance to Education" type="double" defaultValue="0.5" />
+	<parameter name="offline_rate" displayName="1 - Offline (Text,e-mail)" type="double" defaultValue="0.5" />
+	<parameter name="online_rate" displayName="3 - Online (Tele-monitoring)" type="double" defaultValue="0.3" />
+	<parameter name="onsite_rate" displayName="5 - Onsite (Education)" type="double" defaultValue="0.1" />
+	<parameter name="max_threshold" displayName="Maximum Threshold" type="double" defaultValue="0.5" />
+	<parameter name="min_threshold" displayName="Minimum Threshold" type="double" defaultValue="0.2" />
+	<parameter name="offline_cost" displayName="2 - Cost Offline (Text,e-mail)" type="double" defaultValue="1.0" />
+	<parameter name="online_cost" displayName="4 - Cost Online (Tele-monitoring)" type="double" defaultValue="5.0" />
+	<parameter name="onsite_cost" displayName="6 - Cost Onsite (Education)" type="double" defaultValue="20.0" />
+	<parameter name="reachability" displayName="7 - Successrate of Telemonitoring" type="double" defaultValue="0.5" />
+	<parameter name="attendance_rate" displayName="8 - Attendance to Education" type="double" defaultValue="0.6" />
+	<parameter name="impact_Offline" displayName="Impact - Offline Intervention" type="double" defaultValue="0.90" />
+	<parameter name="impact_Online" displayName="Impact - Online Intervention" type="double" defaultValue="0.5" />
+	<parameter name="impact_Onsite" displayName="Impact - Onsite Intervention" type="double" defaultValue="0.1" />
+	<parameter name="mortality" displayName="Mortality Possible?" type="int" defaultValue="0" />
+	<parameter name="visit_cost" displayName="9 - Cost of a Visit" type="double" defaultValue="30" />
 	
 </parameters>

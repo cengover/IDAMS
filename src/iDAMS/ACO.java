@@ -17,6 +17,7 @@ public class ACO {
 	public double offline_cost; // Cost of offline messaging
 	public double online_cost; // Cost of tele-monitoring
 	public double onsite_cost;// Cost of education by community workers
+	public double visit_cost; // Cost of care to patient
 	
 	public ACO(int id){
 		
@@ -30,6 +31,8 @@ public class ACO {
 		this.offline_cost = (Double)p.getDouble("offline_cost");
 		this.online_cost = (Double)p.getDouble("online_cost");
 		this.onsite_cost = (Double)p.getDouble("onsite_cost");
+		this.visit_cost = (Double)p.getDouble("visit_cost");
+		
 		
 		
 	}
@@ -49,7 +52,8 @@ public class ACO {
 	public enum BillType {
 		offline,
 		online,
-		onsite
+		onsite,
+		visit
 	}
 	public void bill(Bene patient, PCP provider, double cost, BillType costType) {
 		
@@ -60,7 +64,10 @@ public class ACO {
 		for (Iterator<Bill> iterator = this.outstandingBills.iterator(); iterator.hasNext();) {	
 			
 			Bill b = iterator.next();
-			cost = cost + b.cost;
+			if (b.costType!=BillType.visit){
+				
+				cost = cost + b.cost;
+			}
 		}
 		return cost;
 	}
@@ -102,6 +109,18 @@ public class ACO {
 				cost = cost + b.cost;
 			}
 			
+		}
+		return cost;
+	}
+	public double getVisitCost(){
+		double cost = 0;
+		for (Iterator<Bill> iterator = this.outstandingBills.iterator(); iterator.hasNext();) {	
+			
+			Bill b = iterator.next();
+			if (b.costType==BillType.visit){
+				
+				cost = cost + b.cost;
+			}		
 		}
 		return cost;
 	}

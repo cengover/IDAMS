@@ -21,6 +21,7 @@ public class PCP implements Provider {
 	// List of patients in the line
 	public LinkedList<Bene> cList;
 	public ACO aco;
+	public int countMoratality;
 
 	
 	public PCP(int id, ACO a){
@@ -32,6 +33,7 @@ public class PCP implements Provider {
 		this.distinct_patients = 0;
 		this.cList = new LinkedList<Bene>();
 		this.aco = a;
+		this.countMoratality = 0;
 	}
 	
 	// Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
@@ -50,6 +52,7 @@ public class PCP implements Provider {
 			// Serve the first patient in the queue
 			Bene patient = this.cList.getFirst();
 			patient.health = 0;
+			aco.bill(patient, this, aco.visit_cost, BillType.visit);
 			// Assign interventions
 			if (RandomHelper.nextDoubleFromTo(0, 1)<aco.offline_rate){
 				
@@ -73,9 +76,10 @@ public class PCP implements Provider {
 				}			
 			}
 			// Kill Bene
-			if (patient.visits>5){//*****************************************************************************************
+			if (patient.visits>3&&p.getInteger("mortality")==1){//*****************************************************************************************
 				
 				context.remove(patient);
+				this.countMoratality++;
 				
 			}
 			this.cList.removeFirst();
@@ -97,5 +101,9 @@ public class PCP implements Provider {
 		offline,
 		online,
 		onsite
+	}
+	public int getMortalityCount() {
+		
+		return this.countMoratality;
 	}
 }

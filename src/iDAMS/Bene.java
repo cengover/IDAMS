@@ -58,15 +58,15 @@ public class Bene {
 			Intervention inter = interventionList.getFirst();
 			if (inter.intType==interventionType.offline){
 				
-				this.behavior=this.behavior*0.90;
+				this.behavior=this.behavior*p.getDouble("impact_Offline");
 			}			
 			else if (inter.intType==interventionType.online){
 				
-				this.behavior=this.behavior*0.50;
+				this.behavior=this.behavior*p.getDouble("impact_Online");
 			}
 			else if (inter.intType==interventionType.onsite){
 				
-				this.behavior=this.behavior*0.20;
+				this.behavior=this.behavior*p.getDouble("impact_Onsite");;
 			}
 			interventionList.removeFirst();
 		}
@@ -91,7 +91,7 @@ public class Bene {
 		if (this.behavior>this.threshold){
 			
 			this.duration++;
-			if(this.health !=2&&this.duration==3){
+			if(this.health !=2&&this.duration==2){
 				
 				this.duration = 0;
 				this.health++;
@@ -110,7 +110,7 @@ public class Bene {
 	}
 	public double getHealth(){
 		
-		return this.behavior;	
+		return this.health;	
 	}
 	public double getVisits(){
 		

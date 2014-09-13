@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<parameters>
+
+	<parameter name="randomSeed" displayName="Default Random Seed" type="int" defaultValue="1" />
+	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="100" />
+	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="1" />
+	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="3" />
+	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="2" />
+	<parameter name="numOfPCPs" displayName="Number of PCPs" type="int" defaultValue="2" />
+	<parameter name="endOfSim" displayName="Terminating Time tick" type="int" defaultValue="200" />
+	<parameter name="offline_rate" displayName="1 - Text,e-mail etc." type="double" defaultValue="0.5" />
+	<parameter name="online_rate" displayName="3 - Tele-monitoring" type="double" defaultValue="0.3" />
+	<parameter name="onsite_rate" displayName="5 - Onsite Education" type="double" defaultValue="0.1" />
+	<parameter name="max_threshold" displayName="Maximum Threshold" type="double" defaultValue="1.0" />
+	<parameter name="min_threshold" displayName="Minimum Threshold" type="double" defaultValue="0.5" />
+	<parameter name="offline_cost" displayName="2 - Cost-Text,e-mail etc." type="double" defaultValue="1.0" />
+	<parameter name="online_cost" displayName="4 - Cost Tele-monitoring" type="double" defaultValue="5.0" />
+	<parameter name="onsite_cost" displayName="6 - Cost Onsite Education" type="double" defaultValue="20.0" />
+	<parameter name="reachability" displayName="7 - Successrate of Telemonitoring" type="double" defaultValue="0.5" />
+	<parameter name="attendance_rate" displayName="8 - Attendance to Education" type="double" defaultValue="0.5" />
+	
+</parameters>
