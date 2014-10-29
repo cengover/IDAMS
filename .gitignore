@@ -12,3 +12,4 @@ tmp/**/*
 .externalToolBuilders/
 
 # Locally stored "Eclipse launch configurations"
+/bin

@@ -1,27 +1,29 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Avg. Behavior vs. Time</name>
-  <dataSet>Avg Behavior</dataSet>
+  <name>Onsite Cost over Time</name>
+  <dataSet>Onsite</dataSet>
   <xAxisLabel>Time Tick</xAxisLabel>
-  <yAxisLabel>Average Behavior</yAxisLabel>
-  <chartTitle>Average Behavior over Time</chartTitle>
+  <yAxisLabel>Cumulative Onsite Cost</yAxisLabel>
+  <chartTitle>Onsite Cost over Time</chartTitle>
   <type>TIME_SERIES</type>
   <background>
-    <red>204</red>
-    <green>204</green>
-    <blue>204</blue>
+    <red>192</red>
+    <green>192</green>
+    <blue>192</blue>
     <alpha>255</alpha>
   </background>
-  <gridLineColor class="javax.swing.plaf.ColorUIResource">
-    <value>-1</value>
-    <falpha>0.0</falpha>
+  <gridLineColor>
+    <red>255</red>
+    <green>255</green>
+    <blue>255</blue>
+    <alpha>255</alpha>
   </gridLineColor>
   <showGrid>true</showGrid>
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Behavior</string>
+      <string>Onsite</string>
       <SeriesData>
-        <label>Behavior</label>
+        <label>Onsite</label>
         <color>
           <red>0</red>
           <green>0</green>

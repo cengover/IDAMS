@@ -1,29 +1,27 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Online Cost over Time</name>
-  <dataSet>Online Cost</dataSet>
+  <name>Total Cost over Time</name>
+  <dataSet>Total Cost</dataSet>
   <xAxisLabel>Time Tick</xAxisLabel>
-  <yAxisLabel>Cumulative Online Cost</yAxisLabel>
-  <chartTitle>Online Cost over Time</chartTitle>
+  <yAxisLabel>Cumulative Total Intervention Cost</yAxisLabel>
+  <chartTitle>Total Intervention Cost Over Time</chartTitle>
   <type>TIME_SERIES</type>
   <background>
-    <red>192</red>
-    <green>192</green>
-    <blue>192</blue>
+    <red>204</red>
+    <green>204</green>
+    <blue>204</blue>
     <alpha>255</alpha>
   </background>
-  <gridLineColor>
-    <red>255</red>
-    <green>255</green>
-    <blue>255</blue>
-    <alpha>255</alpha>
+  <gridLineColor class="javax.swing.plaf.ColorUIResource">
+    <value>-1</value>
+    <falpha>0.0</falpha>
   </gridLineColor>
   <showGrid>true</showGrid>
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Online</string>
+      <string>Total Cost</string>
       <SeriesData>
-        <label>Online</label>
+        <label>Total Cost</label>
         <color>
           <red>0</red>
           <green>0</green>
