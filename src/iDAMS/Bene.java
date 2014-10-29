@@ -26,6 +26,7 @@ public class Bene {
 	public LinkedList<Bene> sList;
 	public LinkedList<PCP> pList;
 	public LinkedList<Intervention> interventionList; 
+	public double susceptibility;
 	
 	public Bene(int id){
 		
@@ -39,6 +40,8 @@ public class Bene {
 		this.sList = new LinkedList<Bene>(); //Social Network
 		this.pList = new LinkedList<PCP>(); //Provider List
 		this.interventionList = new LinkedList<Intervention>();
+		// Parameterize this Min/Max susceptibility rates
+		this.susceptibility = RandomHelper.nextDoubleFromTo(0.1, 0.3);
 	}
 	
 	//Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
@@ -78,15 +81,17 @@ public class Bene {
 							
 				// Interact here
 				Bene bene = (Bene)iterator.next();
-				total = total+bene.behavior;
+				// Planned Behavior simple implementation
+				this.behavior = this.behavior + ((bene.behavior-this.behavior)*this.susceptibility);	
+				/*total = total+bene.behavior;
 				if (bene == sList.getLast()){
 					
 					total = (Double)total/p.getInteger("numOfLinks");
-					bene.behavior = RandomHelper.nextDoubleFromTo(Math.min(total,this.behavior),Math.max(total,this.behavior));
-				}
+					this.behavior = RandomHelper.nextDoubleFromTo(Math.min(total,this.behavior),Math.max(total,this.behavior));
+				}*/
 			}
 		}
-		
+
 		// Seek treatment
 		if (this.behavior>this.threshold){
 			

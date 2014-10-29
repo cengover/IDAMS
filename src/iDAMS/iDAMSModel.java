@@ -31,25 +31,25 @@ public class iDAMSModel implements ContextBuilder<Object>{
 				new GridBuilderParameters<Object>(new WrapAroundBorders(), 
 					new RandomGridAdder<Object>(), true, width, height));
 		
-		// Create the social Network
+		// Create the social Network = Un-directed
 		Network<Object> sNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"socialNetwork", context, false);
 		
-		// Create the Bene-Provider Network
+		// Create the Bene-Provider Network = Un-directed
 		Network<Object> b2pNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"bene2PCPNetwork", context, false);
 		
 		// Create the initial ACO and add to the context.
 		ACO aco = new ACO(1);
 		context.add(aco);
-		grid.moveTo(aco, 0,0);
+		grid.moveTo(aco,0,0);
 			
 		// Create the initial benes and add to the context. 
 		for(int i = 0; i < benes; i++){
 			
 			Bene bene = new Bene(i);
 			context.add(bene);
-			grid.moveTo(bene, 1,0);
+			grid.moveTo(bene,1,0);
 		}
 		
 		// Create the initial PCPs and add to the context. 
@@ -58,7 +58,7 @@ public class iDAMSModel implements ContextBuilder<Object>{
 			PCP pcp = new PCP(i,aco);
 			aco.pcpList.add(pcp);
 			context.add(pcp);
-			grid.moveTo(pcp, 2,0);
+			grid.moveTo(pcp,2,0);
 		}
 		// Random Directed Graph among bene population
 		randomStaticSocialNetwork(grid, sNetwork, links);
@@ -76,17 +76,18 @@ public class iDAMSModel implements ContextBuilder<Object>{
 			if (o instanceof Bene){
 				source = (Bene)o;
 				// Loop until the number of connections is satisfied
-				int con = 0;
+				int con = source.sList.size();
 				while (con < links){
 					// Get a bene object
 					Object t = grid.getRandomObjectAt(1,0);
 					if (t instanceof Bene){
 						target = (Bene)t;
 						// If selected agent is not a neighbor and itself
-						if (((Bene) o).sList.contains(t) == false && source!=target){
+						if (((Bene) o).sList.contains(t) == false && source!=target && target.sList.size()<5){
 							
 							sNetwork.addEdge(source, target);
 							((Bene) source).sList.add((Bene) target);
+							((Bene) target).sList.add((Bene) source);
 							con++;
 						}		
 					}			
@@ -101,14 +102,9 @@ public class iDAMSModel implements ContextBuilder<Object>{
 			
 			if (o instanceof Bene){
 				
-				for (Object pro: grid.getObjectsAt(2,0)){
-					
-					if (pro instanceof PCP){
-						
-						b2pNetwork.addEdge(o, pro);
-						((Bene) o).pList.add((PCP) pro);
-					}
-				}
+				Provider pro  =  (Provider)grid.getRandomObjectAt(2,0);
+				b2pNetwork.addEdge(o, pro);
+				((Bene) o).pList.add((PCP) pro);
 			}
 		}
 	}
