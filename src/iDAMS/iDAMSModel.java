@@ -35,9 +35,14 @@ public class iDAMSModel implements ContextBuilder<Object>{
 		Network<Object> sNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"socialNetwork", context, false);
 		
+		
 		// Create the Bene-Provider Network = Un-directed
 		Network<Object> b2pNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"bene2PCPNetwork", context, false);
+		
+		// Create the social Network = Un-directed
+		Network<Object> gNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
+				"groupNetwork", context, false);
 		
 		// Create the initial ACO and add to the context.
 		ACO aco = new ACO(1);
@@ -66,7 +71,7 @@ public class iDAMSModel implements ContextBuilder<Object>{
 		randomStaticBeneProviderNetwork(grid, b2pNetwork);
 		return context;			
 	}
-	// Random Directed Graph among bene population
+	// Random Un-Directed Graph among bene population
 	public void randomStaticSocialNetwork(Grid grid,Network sNetwork, int links){
 		
 		Bene source = new Bene(1);

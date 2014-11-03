@@ -32,8 +32,8 @@ public class Bene {
 		
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		this.id = id;
-		this.health = RandomHelper.nextIntFromTo(0, 1); //Health Status;
-		this.behavior = RandomHelper.nextDoubleFromTo(0, 1); //Health Behavior;
+		this.health = RandomHelper.nextIntFromTo(0, 1); // Health Status 0 = Healthy, 1 = Pre-diabetes, 2 = Un-complicated diabetes, 3 = Complicated diabetes, 4 = Death
+		this.behavior = RandomHelper.nextDoubleFromTo(0, 1); // Health Behavior;
 		this.duration = 0;
 		this.visits = 0;
 		this.threshold = RandomHelper.nextDoubleFromTo((Double)p.getDouble("min_threshold"),(Double)p.getDouble("max_threshold")); //Threshold for seeking treatment
@@ -83,25 +83,19 @@ public class Bene {
 				Bene bene = (Bene)iterator.next();
 				// Planned Behavior simple implementation
 				this.behavior = this.behavior + ((bene.behavior-this.behavior)*this.susceptibility);	
-				/*total = total+bene.behavior;
-				if (bene == sList.getLast()){
-					
-					total = (Double)total/p.getInteger("numOfLinks");
-					this.behavior = RandomHelper.nextDoubleFromTo(Math.min(total,this.behavior),Math.max(total,this.behavior));
-				}*/
 			}
 		}
 
 		// Seek treatment
 		if (this.behavior>this.threshold){
-			
+			int s = (Integer)p.getInteger("stateSympthom");
 			this.duration++;
-			if(this.health !=2&&this.duration==2){
+			if(this.health !=s&&this.duration==2){
 				
 				this.duration = 0;
 				this.health++;
 			}
-			if(this.health==2){
+			if(this.health==s){
 				
 				this.pList.getFirst().cList.add(this);	
 				this.visits++;

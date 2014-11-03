@@ -2,13 +2,17 @@ package iDAMS;
 
 import iDAMS.ACO.Bill;
 import iDAMS.ACO.BillType;
+
+import java.util.Iterator;
 import java.util.LinkedList;
+
 import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
+import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.util.ContextUtils;
 
@@ -76,13 +80,26 @@ public class PCP implements Provider {
 				}			
 			}
 			// Kill Bene
-			if (patient.visits>3&&p.getInteger("mortality")==1){//*****************************************************************************************
+			if (p.getInteger("mortality")==1&&patient.health==p.getInteger("stateDeath")){
 				
 				context.remove(patient);
-				this.countMoratality++;
-				
+				this.countMoratality++;	
 			}
 			this.cList.removeFirst();
+		}
+		
+		// Dynamic Network?
+		if ((Integer)p.getInteger("controlledGroup") == 1){
+			// Fixed or mixed?
+			if ((Integer)p.getInteger("mixed") == 1){
+			// Random?
+				if ((Integer)p.getInteger("mixingStyle") == 1){
+					
+					
+				}
+				
+			}
+			
 		}
 		
 		RunEnvironment.getInstance().endAt((Integer)p.getValue("endOfSim"));	
@@ -105,5 +122,37 @@ public class PCP implements Provider {
 	public int getMortalityCount() {
 		
 		return this.countMoratality;
+	}
+	// Group formation
+	public void randomReciprocalNetwork(){
+		
+		Parameters p = RunEnvironment.getInstance().getParameters();
+		Context context = ContextUtils.getContext(this);
+	    Network gNetwork = (Network) context.getProjection("gNetwork");
+	    Grid grid = (Grid) context.getProjection("grid");
+		Bene source = new Bene(1);
+		Bene target = new Bene(1);
+		gNetwork.removeEdges();	
+		int t = 0;
+		int size = (Integer)p.getInteger("groupSize");
+	    LinkedList gList = new LinkedList<Bene>();
+	    // Get 10 members
+		while (t < size){
+			
+			Bene o = (Bene) grid.getRandomObjectAt(1,0);
+			if (gNetwork.getDegree(o) == 0){
+				
+				gList.add(o);
+				t++;
+			}
+		}
+		for (int i = 0; i < size; i++) {
+
+			for (int j = i; j < size; j++){
+				
+				gNetwork.addEdge(gList.get(i),gList.get(j));
+			}		
+		}
+		// Do it for the number of groups						
 	}
 }

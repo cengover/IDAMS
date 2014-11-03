@@ -18,10 +18,18 @@
 	<parameter name="onsite_cost" displayName="6 - Cost Onsite (Education)" type="double" defaultValue="20.0" />
 	<parameter name="reachability" displayName="7 - Successrate of Telemonitoring" type="double" defaultValue="0.5" />
 	<parameter name="attendance_rate" displayName="8 - Attendance to Education" type="double" defaultValue="0.6" />
+	<parameter name="visit_cost" displayName="9 - Cost of a Visit" type="double" defaultValue="30" />
 	<parameter name="impact_Offline" displayName="Impact - Offline Intervention" type="double" defaultValue="0.90" />
 	<parameter name="impact_Online" displayName="Impact - Online Intervention" type="double" defaultValue="0.5" />
 	<parameter name="impact_Onsite" displayName="Impact - Onsite Intervention" type="double" defaultValue="0.1" />
 	<parameter name="mortality" displayName="Mortality Possible?" type="int" defaultValue="0" />
-	<parameter name="visit_cost" displayName="9 - Cost of a Visit" type="double" defaultValue="30" />
+	<parameter name="stateDeath" displayName="Death State" type="int" defaultValue="4" />
+	<parameter name="stateSympthom" displayName="Sympthomatic State" type="int" defaultValue="1" />
+	<parameter name="controlledGroup" displayName="Controlled Group?" type="int" defaultValue="1" />
+	<parameter name="mixed" displayName="Mixed Groups?" type="int" defaultValue="1" />
+	<parameter name="mixingStyle" displayName="Mixing Style" type="int" defaultValue="1" />
+	<parameter name="groupSize" displayName="SMA Group Size" type="int" defaultValue="10" />
+	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="10" />
+
 	
 </parameters>
