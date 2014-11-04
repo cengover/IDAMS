@@ -45,7 +45,7 @@ public class Bene {
 	}
 	
 	//Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
-	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 1)
+	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 2)
 	public void step(){
 		
 		// Get Scheduler
@@ -73,7 +73,6 @@ public class Bene {
 			}
 			interventionList.removeFirst();
 		}
-
 		// Signal
 		double total = 0;
 		if (this.sList.size()>0){
@@ -85,7 +84,6 @@ public class Bene {
 				this.behavior = this.behavior + ((bene.behavior-this.behavior)*this.susceptibility);	
 			}
 		}
-
 		// Seek treatment
 		if (this.behavior>this.threshold){
 			int s = (Integer)p.getInteger("stateSympthom");

@@ -13,6 +13,7 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
+import repast.simphony.space.graph.RepastEdge;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.util.ContextUtils;
 
@@ -24,6 +25,7 @@ public class PCP implements Provider {
 	int distinct_patients; // Distinct number of patients who are served
 	// List of patients in the line
 	public LinkedList<Bene> cList;
+	public LinkedList<Bene> patientList;
 	public ACO aco;
 	public int countMoratality;
 
@@ -36,12 +38,13 @@ public class PCP implements Provider {
 		this.total_patients = 0;
 		this.distinct_patients = 0;
 		this.cList = new LinkedList<Bene>();
+		this.patientList = new LinkedList<Bene>();
 		this.aco = a;
 		this.countMoratality = 0;
 	}
 	
 	// Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
-	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 0)
+	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 1)
 	public void step(){
 		
 		// Get Scheduler
@@ -51,6 +54,20 @@ public class PCP implements Provider {
 	    Grid grid = (Grid) context.getProjection("grid");
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();
+		
+		// Dynamic Network?
+		if ((Integer)p.getInteger("controlledGroup") == 1){
+			// Fixed or mixed?
+			if ((Integer)p.getInteger("mixed") == 0){
+				randomGroupNetwork();
+			}
+			else if((Integer)p.getInteger("mixed") == 1 && (Integer)p.getInteger("mixingStyle") == 1){
+				randomGroupNetwork();
+			}
+			else {
+				// Write a method to mix benes based on their attributes
+			}
+		}
 		// If queue is not empty
 		while (this.cList.size() > 0){
 			// Serve the first patient in the queue
@@ -88,20 +105,6 @@ public class PCP implements Provider {
 			this.cList.removeFirst();
 		}
 		
-		// Dynamic Network?
-		if ((Integer)p.getInteger("controlledGroup") == 1){
-			// Fixed or mixed?
-			if ((Integer)p.getInteger("mixed") == 1){
-			// Random?
-				if ((Integer)p.getInteger("mixingStyle") == 1){
-					
-					
-				}
-				
-			}
-			
-		}
-		
 		RunEnvironment.getInstance().endAt((Integer)p.getValue("endOfSim"));	
 	}
 	public class Intervention {
@@ -123,36 +126,39 @@ public class PCP implements Provider {
 		
 		return this.countMoratality;
 	}
-	// Group formation
-	public void randomReciprocalNetwork(){
+	// Random Group Network
+	public void randomGroupNetwork(){
 		
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		Context context = ContextUtils.getContext(this);
-	    Network gNetwork = (Network) context.getProjection("gNetwork");
+	    Network<Object> network = (Network) context.getProjection("groupNetwork");
 	    Grid grid = (Grid) context.getProjection("grid");
-		Bene source = new Bene(1);
-		Bene target = new Bene(1);
-		gNetwork.removeEdges();	
 		int t = 0;
 		int size = (Integer)p.getInteger("groupSize");
-	    LinkedList gList = new LinkedList<Bene>();
-	    // Get 10 members
-		while (t < size){
-			
-			Bene o = (Bene) grid.getRandomObjectAt(1,0);
-			if (gNetwork.getDegree(o) == 0){
-				
-				gList.add(o);
-				t++;
+		// Iterate over this tempList to connect benes - for computational benefits
+	    LinkedList<Bene>tempList = this.patientList;
+	    int numOfGroups = (int) Math.round((double)(this.patientList.size()/size-0.5));
+	    for (int t1 = 0; t1 < numOfGroups; t1++){
+		    LinkedList<Bene> gList = new LinkedList<Bene>();
+	    	while (t < size){
+	    		int source = RandomHelper.nextIntFromTo(0, tempList.size()-1);
+				Bene o = (Bene) tempList.get(source);
+				if (network.getDegree(o) == 0){
+					
+					gList.add(o);
+					tempList.remove(source);
+					t++;
+				}
 			}
-		}
-		for (int i = 0; i < size; i++) {
+			for (int i = 0; i < size; i++) {
 
-			for (int j = i; j < size; j++){
-				
-				gNetwork.addEdge(gList.get(i),gList.get(j));
-			}		
-		}
-		// Do it for the number of groups						
+				for (int j = i+1; j < size; j++){
+					
+					network.addEdge(gList.get(i),gList.get(j));
+					System.out.println("Connect");
+				}		
+			}
+			t = 0;
+	    }					
 	}
 }

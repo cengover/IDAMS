@@ -2,4 +2,5 @@
 	<projection type="grid" id="grid"></projection>
 	<projection type="network" id="socialNetwork"></projection>
 	<projection type="network" id="bene2PCPNetwork"></projection>
+	<projection type="network" id="groupNetwork"></projection>
 </context>

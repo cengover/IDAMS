@@ -2,8 +2,13 @@ package iDAMS;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
+import repast.simphony.space.graph.Network;
+import repast.simphony.util.ContextUtils;
 
 public class ACO {
 	
@@ -31,10 +36,7 @@ public class ACO {
 		this.offline_cost = (Double)p.getDouble("offline_cost");
 		this.online_cost = (Double)p.getDouble("online_cost");
 		this.onsite_cost = (Double)p.getDouble("onsite_cost");
-		this.visit_cost = (Double)p.getDouble("visit_cost");
-		
-		
-		
+		this.visit_cost = (Double)p.getDouble("visit_cost");	
 	}
 	public class Bill {
 		public PCP pcp;
@@ -59,6 +61,23 @@ public class ACO {
 		
 		outstandingBills.add(new Bill(patient,provider, cost, costType));
 	}
+	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 10)
+	public void step(){
+		
+		Context context = ContextUtils.getContext(this);
+	    Network<Object> network = (Network) context.getProjection("groupNetwork");
+	    Parameters p = RunEnvironment.getInstance().getParameters();
+		if ((Integer)p.getInteger("controlledGroup") == 1){
+			// Fixed or mixed?
+			if ((Integer)p.getInteger("mixed") == 1){
+			// Random?
+				if ((Integer)p.getInteger("mixingStyle") == 1){
+					network.removeEdges();
+				}		
+			}
+		}
+	}
+	
 	public double getCost(){
 		double cost = 0;
 		for (Iterator<Bill> iterator = this.outstandingBills.iterator(); iterator.hasNext();) {	

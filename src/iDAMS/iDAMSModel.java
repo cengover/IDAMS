@@ -1,5 +1,7 @@
 package iDAMS;
 
+import java.util.LinkedList;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.graph.NetworkFactoryFinder;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -12,6 +14,7 @@ import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.RandomGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
+import repast.simphony.util.ContextUtils;
 
 public class iDAMSModel implements ContextBuilder<Object>{
 
@@ -40,7 +43,7 @@ public class iDAMSModel implements ContextBuilder<Object>{
 		Network<Object> b2pNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"bene2PCPNetwork", context, false);
 		
-		// Create the social Network = Un-directed
+		// Create the group Network = Un-directed
 		Network<Object> gNetwork = NetworkFactoryFinder.createNetworkFactory(null).createNetwork(
 				"groupNetwork", context, false);
 		
@@ -103,14 +106,12 @@ public class iDAMSModel implements ContextBuilder<Object>{
 	// Random Graph among benes and providers
 	public void randomStaticBeneProviderNetwork(Grid grid,Network b2pNetwork){
 		
-		for (Object o: grid.getObjects()){
-			
-			if (o instanceof Bene){
+		for (Object o: grid.getObjectsAt(1,0)){
 				
-				Provider pro  =  (Provider)grid.getRandomObjectAt(2,0);
-				b2pNetwork.addEdge(o, pro);
-				((Bene) o).pList.add((PCP) pro);
-			}
+			Provider pro  =  (Provider)grid.getRandomObjectAt(2,0);
+			((PCP) pro).patientList.add((Bene)o);
+			b2pNetwork.addEdge(o, pro);
+			((Bene) o).pList.add((PCP) pro);
 		}
 	}
 }
