@@ -6,7 +6,7 @@
 	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="3" />
 	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="1" />
 	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="5" />
-	<parameter name="numOfPCPs" displayName="Number of Providers" type="int" defaultValue="2" />
+	<parameter name="numOfPCPs" displayName="Number of Providers" type="int" defaultValue="1" />
 	<parameter name="endOfSim" displayName="Terminating Time tick" type="int" defaultValue="200" />
 	<parameter name="offline_rate" displayName="1 - Offline (Text,e-mail)" type="double" defaultValue="0.5" />
 	<parameter name="online_rate" displayName="3 - Online (Tele-monitoring)" type="double" defaultValue="0.3" />

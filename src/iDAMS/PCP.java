@@ -27,7 +27,7 @@ public class PCP implements Provider {
 	public LinkedList<Bene> cList;
 	public LinkedList<Bene> patientList;
 	public ACO aco;
-	public int countMoratality;
+	public int countMortality;
 
 	
 	public PCP(int id, ACO a){
@@ -40,7 +40,7 @@ public class PCP implements Provider {
 		this.cList = new LinkedList<Bene>();
 		this.patientList = new LinkedList<Bene>();
 		this.aco = a;
-		this.countMoratality = 0;
+		this.countMortality = 0;
 	}
 	
 	// Step function - at every time tick agents run it after they are shuffled - You can add priority to the agent types.
@@ -55,20 +55,23 @@ public class PCP implements Provider {
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		
+		
 		// Dynamic Network?
 		if ((Integer)p.getInteger("controlledGroup") == 1){
 			// Fixed or mixed?
 			if ((Integer)p.getInteger("mixed") == 0){
 				randomGroupNetwork();
 			}
-			else if((Integer)p.getInteger("mixed") == 1 && (Integer)p.getInteger("mixingStyle") == 1){
+			else if((Integer)p.getInteger("mixed") == 1 && (Integer)p.getInteger("mixingStyle") == 1 && schedule.getTickCount() == 1){
 				randomGroupNetwork();
 			}
 			else {
 				// Write a method to mix benes based on their attributes
 			}
 		}
-		// If queue is not empty
+		
+		
+		// If queue is not empty - Meaning that Provider received patients
 		while (this.cList.size() > 0){
 			// Serve the first patient in the queue
 			Bene patient = this.cList.getFirst();
@@ -96,17 +99,20 @@ public class PCP implements Provider {
 					patient.interventionList.add(new Intervention(this,interventionType.onsite));
 				}			
 			}
+			
+			
 			// Kill Bene
 			if (p.getInteger("mortality")==1&&patient.health==p.getInteger("stateDeath")){
 				
 				context.remove(patient);
-				this.countMoratality++;	
+				this.countMortality++;	
 			}
 			this.cList.removeFirst();
 		}
 		
 		RunEnvironment.getInstance().endAt((Integer)p.getValue("endOfSim"));	
 	}
+	
 	public class Intervention {
 		
 		public PCP provider;
@@ -124,22 +130,32 @@ public class PCP implements Provider {
 	}
 	public int getMortalityCount() {
 		
-		return this.countMoratality;
+		return this.countMortality;
 	}
 	// Random Group Network
 	public void randomGroupNetwork(){
 		
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		Context context = ContextUtils.getContext(this);
-	    Network<Object> network = (Network) context.getProjection("groupNetwork");
+	    Network<Bene> network = (Network) context.getProjection("groupNetwork");
 	    Grid grid = (Grid) context.getProjection("grid");
-		int t = 0;
+		// Get group size
 		int size = (Integer)p.getInteger("groupSize");
 		// Iterate over this tempList to connect benes - for computational benefits
-	    LinkedList<Bene>tempList = this.patientList;
+		LinkedList<Bene> tempList = new LinkedList<Bene>();
+		for (Iterator<Bene> iterator = this.patientList.iterator(); iterator.hasNext();) {
+			
+			Bene bene = (Bene)iterator.next();
+			tempList.add(bene);
+		}
+	    
+	    // Assign number of groups
 	    int numOfGroups = (int) Math.round((double)(this.patientList.size()/size-0.5));
+		// Count how many patients are put in a group
+	    int t = 0;
 	    for (int t1 = 0; t1 < numOfGroups; t1++){
 		    LinkedList<Bene> gList = new LinkedList<Bene>();
+		    // Select patients until count is equal to group size
 	    	while (t < size){
 	    		int source = RandomHelper.nextIntFromTo(0, tempList.size()-1);
 				Bene o = (Bene) tempList.get(source);
@@ -150,15 +166,17 @@ public class PCP implements Provider {
 					t++;
 				}
 			}
+	    	Bene source = new Bene(1);
+	    	Bene target = new Bene(1);
 			for (int i = 0; i < size; i++) {
 
 				for (int j = i+1; j < size; j++){
-					
-					network.addEdge(gList.get(i),gList.get(j));
-					System.out.println("Connect");
+					source = (Bene)gList.get(i);
+					target = (Bene)gList.get(j);
+					network.addEdge(source, target);
 				}		
 			}
 			t = 0;
-	    }					
+	    }	
 	}
 }
