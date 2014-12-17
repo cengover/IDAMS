@@ -64,18 +64,6 @@ public class ACO {
 	@ScheduledMethod(start = 1, interval = 1, shuffle = true, priority = 10)
 	public void step(){
 		
-		Context context = ContextUtils.getContext(this);
-	    Network<Object> network = (Network) context.getProjection("groupNetwork");
-	    Parameters p = RunEnvironment.getInstance().getParameters();
-		if ((Integer)p.getInteger("controlledGroup") == 1){
-			// Fixed or mixed?
-			if ((Integer)p.getInteger("mixed") == 1){
-			// Random?
-				if ((Integer)p.getInteger("mixingStyle") == 1){
-					network.removeEdges();
-				}		
-			}
-		}
 	}
 	
 	public double getCost(){

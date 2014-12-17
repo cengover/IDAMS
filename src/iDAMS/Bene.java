@@ -86,6 +86,7 @@ public class Bene {
 		}
 		// Seek treatment
 		if (this.behavior>this.threshold){
+			
 			int s = (Integer)p.getInteger("stateSympthom");
 			this.duration++;
 			if(this.health !=s&&this.duration==2){

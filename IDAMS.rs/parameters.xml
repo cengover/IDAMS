@@ -27,9 +27,9 @@
 	<parameter name="stateSympthom" displayName="Sympthomatic State" type="int" defaultValue="1" />
 	<parameter name="controlledGroup" displayName="Controlled Group?" type="int" defaultValue="1" />
 	<parameter name="mixed" displayName="Mixed Groups?" type="int" defaultValue="1" />
-	<parameter name="mixingStyle" displayName="Mixing Style" type="int" defaultValue="1" />
+	<parameter name="mixingStyle" displayName="Mixing Style" type="int" defaultValue="0" />
 	<parameter name="groupSize" displayName="SMA Group Size" type="int" defaultValue="10" />
-	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="10" />
+	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="3" />
 
 	
 </parameters>
