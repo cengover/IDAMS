@@ -89,6 +89,7 @@ public class iDAMSModel implements ContextBuilder<Object>{
 					// Get a bene object
 					Object t = grid.getRandomObjectAt(1,0);
 					if (t instanceof Bene){
+			
 						target = (Bene)t;
 						// If selected agent is not a neighbor and itself
 						if (((Bene) o).sList.contains(t) == false && source!=target && target.sList.size()<5){

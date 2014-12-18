@@ -53,13 +53,13 @@ public class PCP implements Provider {
 		Schedule schedule= (Schedule) RunEnvironment.getInstance().getCurrentSchedule();
 		// Get Context
 		Context context = ContextUtils.getContext(this);
-	    Grid grid = (Grid) context.getProjection("grid");
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		// Increment Tick Count
 		tickCount++;
 		// Dynamic Group Network?
 		if ((Integer)p.getInteger("controlledGroup") == 1){
+			
 			// Fixed or mixed?
 			int i = Math.abs((Integer)p.getInteger("endOfSim")/(Integer)p.getInteger("meetingFrequency"));
 			if ((Integer)p.getInteger("mixed") == 0 && schedule.getTickCount() == 1){
@@ -78,13 +78,13 @@ public class PCP implements Provider {
 					preferedGroupNetwork();
 				}		
 			}
-
 		}
 		
 		if ((Integer)p.getInteger("controlledGroup") == 0){
 		
 			// If queue is not empty - Meaning that Provider received patients
 			while (this.cList.size() > 0){
+				
 				// Serve the first patient in the queue
 				Bene patient = this.cList.getFirst();
 				patient.health = 0;
@@ -136,6 +136,7 @@ public class PCP implements Provider {
 		}
 	}
 	public enum interventionType {
+		
 		offline,
 		online,
 		onsite
@@ -245,7 +246,7 @@ public class PCP implements Provider {
 		for (Iterator<Bene> iterator = bestList.iterator(); iterator.hasNext();) {
 			
 			Bene bene = (Bene)iterator.next();
-			System.out.println("ID = "+bene.id+"Behavior"+bene.behavior);
+			System.out.println("IDBEST = "+bene.id+"Behavior"+bene.behavior);
 		}
 		
 		// Iterate over this tempList to connect benes - for computational benefits
@@ -253,6 +254,7 @@ public class PCP implements Provider {
 			
 			Bene bene = (Bene)iterator.next();
 			tempList.add(bene);
+			System.out.println("ID = "+bene.id+"Behavior"+bene.behavior);
 		}
 		// Count how many patients are put in a group
 	    int t = 0;
