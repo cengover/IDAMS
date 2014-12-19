@@ -36,7 +36,8 @@ public class Bene {
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		this.id = id;
 		this.health = RandomHelper.nextIntFromTo(0, 1);
-		int dist = (Integer)p.getInteger("IniHealthBehDist");
+		this.behavior = RandomHelper.nextDoubleFromTo(0, 1); 
+		/*int dist = (Integer)p.getInteger("IniHealthBehDist");
 		// Initial Health Behavior Assignment
 		if (dist == 0){ // Random Uniform for Health Behavior
 			
@@ -47,7 +48,7 @@ public class Bene {
 			double alpha = (Double)p.getDouble("betaAlpha");
 			double beta = (Double)p.getDouble("betaBeta");
 			this.behavior = RandomHelper.createBeta(alpha, beta).nextDouble();
-		}
+		}*/
 		
 		this.duration = 0;
 		this.visits = 0;
@@ -145,5 +146,9 @@ public class Bene {
 	public double getVisits(){
 		
 		return this.visits;	
+	}
+	public double getId(){
+		
+		return this.id;	
 	}
 }

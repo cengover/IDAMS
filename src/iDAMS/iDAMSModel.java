@@ -1,11 +1,14 @@
 package iDAMS;
 
+import java.util.LinkedList;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.space.graph.NetworkFactoryFinder;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.parameter.Parameters;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -72,31 +75,47 @@ public class iDAMSModel implements ContextBuilder<Object>{
 	// Random Un-Directed Graph among bene population
 	public void randomStaticSocialNetwork(Grid grid,Network sNetwork, int links){
 		
-		Bene source = new Bene(1);
-		Bene target = new Bene(1);
+		LinkedList<Bene> tempList = new LinkedList<Bene>();
 		for (Object o: grid.getObjectsAt(1,0)){
 			
 			if (o instanceof Bene){
-				source = (Bene)o;
-				// Loop until the number of connections is satisfied
-				int con = source.sList.size();
-				while (con < links){
-					// Get a bene object
-					Object t = grid.getRandomObjectAt(1,0);
-					if (t instanceof Bene){
-			
-						target = (Bene)t;
-						// If selected agent is not a neighbor and itself
-						if (((Bene) o).sList.contains(t) == false && source!=target && target.sList.size()<5){
-							
-							sNetwork.addEdge(source, target);
-							((Bene) source).sList.add((Bene) target);
-							((Bene) target).sList.add((Bene) source);
-							con++;
-						}		
-					}			
-				}						
+				Bene b = (Bene)o;
+				tempList.add(b);
 			}
+		}
+		int pop = tempList.size();
+		while (tempList.size()>1&&(tempList.size()-1)>(links-sNetwork.getDegree(tempList.getFirst()))){
+			
+			Bene source = (Bene)tempList.getFirst();
+			int con = sNetwork.getDegree(source);
+			// Loop until the number of connections is satisfied
+			while (con < links){
+						
+				// Get a bene object
+				int j = RandomHelper.nextIntFromTo(1, tempList.size()-1);
+				Bene target = (Bene)tempList.get(j);
+						
+				// If selected agent is not a neighbor and itself
+				if (sNetwork.getEdge(source, target) == null){
+								
+					sNetwork.addEdge(source, target);
+					((Bene) source).sList.add((Bene) target);
+					((Bene) target).sList.add((Bene) source);
+					System.out.println("SOURCE "+source.id+"TARGET"+target.id);
+					System.out.println("SIZE="+tempList.size());
+					con++;
+					System.out.println("HEYYYYY "+source.id);
+					if (con == links){
+							
+						tempList.remove(source);
+					}
+					if (sNetwork.getDegree(target) == links){
+						
+						tempList.remove(target);
+					}
+					System.out.println("SIZE2="+tempList.size());
+				}							
+			}		
 		}
 	}
 	// Random Graph among benes and providers
@@ -104,10 +123,12 @@ public class iDAMSModel implements ContextBuilder<Object>{
 		
 		for (Object o: grid.getObjectsAt(1,0)){
 				
+			Bene b = (Bene)o;
 			Provider pro  =  (Provider)grid.getRandomObjectAt(2,0);
-			((PCP) pro).patientList.add((Bene)o);
-			b2pNetwork.addEdge(o, pro);
+			((PCP) pro).patientList.add(b);
+			b2pNetwork.addEdge(b, pro);
 			((Bene) o).pList.add((PCP) pro);
+			System.out.println("HEYYYYY2");
 		}
 	}
 }
