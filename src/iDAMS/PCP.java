@@ -152,8 +152,6 @@ public class PCP implements Provider {
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		Context context = ContextUtils.getContext(this);
 	    Network<Bene> network = (Network) context.getProjection("groupNetwork");
-	    // Remove Edges
-	    network.removeEdges();
 		// Get group size
 		int size = (Integer)p.getInteger("groupSize");
 		// Iterate over this tempList to connect benes - for computational benefits
@@ -175,21 +173,25 @@ public class PCP implements Provider {
 	    	while (t < size){
 	    		int source = RandomHelper.nextIntFromTo(0, tempList.size()-1);
 				Bene o = (Bene) tempList.get(source);
-				if (network.getDegree(o) == 0){
-					
-					gList.add(o);
-					tempList.remove(source);
-					t++;
-				}
+				gList.add(o);
+				tempList.remove(source);
+				t++;
 			}
-	    	Bene source = new Bene(1);
-	    	Bene target = new Bene(1);
 			for (int i = 0; i < size; i++) {
 
 				for (int j = i+1; j < size; j++){
-					source = (Bene)gList.get(i);
-					target = (Bene)gList.get(j);
-					network.addEdge(source, target);
+					
+					Bene source = (Bene)gList.get(i);
+					Bene target = (Bene)gList.get(j);
+					if (network.getEdge(source, target) != null){
+						
+						double weight = network.getEdge(source, target).getWeight();
+						network.getEdge(source, target).setWeight(1.0);
+					}
+					else{
+						
+						network.addEdge(source, target,1.0);
+					}
 				}		
 			}
 			t = 0;
@@ -203,8 +205,6 @@ public class PCP implements Provider {
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		Context context = ContextUtils.getContext(this);
 	    Network<Bene> network = (Network) context.getProjection("groupNetwork");
-	    // Remove Edges
-	    network.removeEdges();
 		// Get group size
 		int size = (Integer)p.getInteger("groupSize");
 	    // Assign number of groups
@@ -265,23 +265,28 @@ public class PCP implements Provider {
 		    tempList.remove(bestList.get(t1));
 		    // Select patients until count is equal to group size
 	    	while (t < size){
+	    		
 	    		int source = RandomHelper.nextIntFromTo(0, tempList.size()-1);
 				Bene o = (Bene) tempList.get(source);
-				if (network.getDegree(o) == 0){
-					
-					gList.add(o);
-					tempList.remove(source);
-					t++;
-				}
+				gList.add(o);
+				tempList.remove(source);
+				t++;
 			}
-	    	Bene source = new Bene(1);
-	    	Bene target = new Bene(1);
 			for (int i = 0; i < size; i++) {
 
 				for (int j = i+1; j < size; j++){
-					source = (Bene)gList.get(i);
-					target = (Bene)gList.get(j);
-					network.addEdge(source, target);
+					
+					Bene source = (Bene)gList.get(i);
+					Bene target = (Bene)gList.get(j);
+					if (network.getEdge(source, target) != null){
+						
+						double weight = network.getEdge(source, target).getWeight();
+						network.getEdge(source, target).setWeight(1.0);
+					}
+					else{
+						
+						network.addEdge(source, target,1.0);
+					}
 				}		
 			}
 			t = 0;

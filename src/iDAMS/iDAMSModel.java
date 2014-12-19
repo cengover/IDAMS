@@ -1,24 +1,19 @@
 package iDAMS;
 
-import java.util.LinkedList;
-
 import repast.simphony.context.Context;
 import repast.simphony.context.space.graph.NetworkFactoryFinder;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.parameter.Parameters;
-import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.RandomGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
-import repast.simphony.util.ContextUtils;
 
 public class iDAMSModel implements ContextBuilder<Object>{
 
-	
 	public Context<Object> build(Context<Object> context) {	
 	
 		// Here assign the parameter values

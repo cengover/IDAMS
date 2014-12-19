@@ -7,6 +7,7 @@ import repast.simphony.context.Context;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.parameter.Parameters;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
 
@@ -21,8 +22,9 @@ public class ACO {
 	public double onsite_rate; // Education by community workers
 	public double offline_cost; // Cost of offline messaging
 	public double online_cost; // Cost of tele-monitoring
-	public double onsite_cost;// Cost of education by community workers
+	public double onsite_cost; // Cost of education by community workers
 	public double visit_cost; // Cost of care to patient
+	double[][] stateTransitions; 
 	
 	public ACO(int id){
 		
@@ -36,9 +38,17 @@ public class ACO {
 		this.offline_cost = (Double)p.getDouble("offline_cost");
 		this.online_cost = (Double)p.getDouble("online_cost");
 		this.onsite_cost = (Double)p.getDouble("onsite_cost");
-		this.visit_cost = (Double)p.getDouble("visit_cost");	
+		this.visit_cost = (Double)p.getDouble("visit_cost");
+		int dimension = (Integer)p.getInteger("stateDeath");
+		stateTransitions = new double[dimension+1][dimension+1];
+		// Read the dimensions here from a file
+		stateTransitions[0][1] = RandomHelper.nextDoubleFromTo(0, 1);
+		stateTransitions[1][2] = RandomHelper.nextDoubleFromTo(0, 1);
+		stateTransitions[2][3] = RandomHelper.nextDoubleFromTo(0, 1);
+		stateTransitions[3][4] = RandomHelper.nextDoubleFromTo(0, 1);
 	}
 	public class Bill {
+		
 		public PCP pcp;
 		public Bene bene;
 		public double cost;
@@ -52,6 +62,7 @@ public class ACO {
 		}
 	}
 	public enum BillType {
+		
 		offline,
 		online,
 		onsite,

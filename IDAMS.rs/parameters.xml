@@ -2,7 +2,7 @@
 <parameters>
 
 	<parameter name="randomSeed" displayName="Default Random Seed" type="int" defaultValue="1" />
-	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="100" />
+	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="10" /> 
 	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="3" />
 	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="1" />
 	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="5" />
@@ -29,7 +29,10 @@
 	<parameter name="mixed" displayName="Mixed Groups?" type="int" defaultValue="1" />
 	<parameter name="mixingStyle" displayName="Mixing Style" type="int" defaultValue="0" />
 	<parameter name="groupSize" displayName="SMA Group Size" type="int" defaultValue="10" />
-	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="200" />
+	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="5" />
+	<parameter name="IniHealthBehDist" displayName="Initial Behavior Distribution" type="int" defaultValue="0" />
+	<parameter name="betaAlpha" displayName="BetaDist Alpha" type="double" defaultValue="0.5" />
+	<parameter name="betaBeta" displayName="BetaDist Beta" type="double" defaultValue="0.5" />
 
 
 </parameters>
