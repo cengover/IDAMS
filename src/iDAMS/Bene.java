@@ -19,10 +19,8 @@ public class Bene {
 	public int id;
 	public int health;
 	public double behavior;
-	public double duration;
 	public int visits;
 	double threshold;
-	public LinkedList<Bene> sList;
 	public LinkedList<PCP> pList;
 	public LinkedList<Intervention> interventionList; 
 	public double susceptibility;
@@ -36,9 +34,9 @@ public class Bene {
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		this.id = id;
 		this.health = RandomHelper.nextIntFromTo(0, 1);
-		this.behavior = RandomHelper.nextDoubleFromTo(0, 1); 
-		/*int dist = (Integer)p.getInteger("IniHealthBehDist");
-		// Initial Health Behavior Assignment
+		// Get the distribution for initial health of the population
+		int dist = (Integer)p.getInteger("IniHealthBehDist");
+		// Initial Health Behavior Assignment - Higher values indicate healthier behavior
 		if (dist == 0){ // Random Uniform for Health Behavior
 			
 			this.behavior = RandomHelper.nextDoubleFromTo(0, 1); 
@@ -48,15 +46,14 @@ public class Bene {
 			double alpha = (Double)p.getDouble("betaAlpha");
 			double beta = (Double)p.getDouble("betaBeta");
 			this.behavior = RandomHelper.createBeta(alpha, beta).nextDouble();
-		}*/
+		}
 		
-		this.duration = 0;
 		this.visits = 0;
-		this.threshold = RandomHelper.nextDoubleFromTo((Double)p.getDouble("min_threshold"),(Double)p.getDouble("max_threshold")); //Threshold for seeking treatment
-		this.sList = new LinkedList<Bene>(); //Social Network
+		//Threshold for seeking treatment
+		this.threshold = RandomHelper.nextDoubleFromTo((Double)p.getDouble("min_threshold"),(Double)p.getDouble("max_threshold"));
 		this.pList = new LinkedList<PCP>(); //Provider List
 		this.interventionList = new LinkedList<Intervention>();
-		// Parameterize this Min/Max of rate
+		// Parameterize the variables below woth min and max values
 		this.susceptibility = RandomHelper.nextDoubleFromTo(0.1, 0.3);
 		this.selfEfficacy = RandomHelper.nextDoubleFromTo(0.1, 0.3);
 		this.weightDecay = RandomHelper.nextDoubleFromTo(0.90, 0.99);
@@ -71,15 +68,15 @@ public class Bene {
 		// Get Context 
 		Context context = ContextUtils.getContext(this);
 	    Network<Bene> gNetwork = (Network<Bene>) context.getProjection("groupNetwork");
+	    Network<Bene> sNetwork = (Network<Bene>) context.getProjection("socialNetwork");
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();	
-		// Interventions
-		if ((Integer)p.getInteger("controlledGroup") == 0){
+		// ****************** Interventions
+		if ((Integer)p.getInteger("interventions") == 1){
 			
 			while (this.interventionList.isEmpty()==false){
 				
-				//Iterator<Intervention> iterator = this.interventionList.iterator();
-				// Interact here
+				// Intervention impact
 				Intervention inter = interventionList.getFirst();
 				if (inter.intType==interventionType.offline){
 					
@@ -96,33 +93,46 @@ public class Bene {
 				interventionList.removeFirst();
 			}
 		}
-		// Social Influence Mechanism
-		if (this.sList.size()>0){
-			for (Iterator<Bene> iterator = this.sList.iterator(); iterator.hasNext();) {
+		// ****************** Social Influence Mechanism
+		if (sNetwork.getDegree(this)>0){
+			for(Iterator<RepastEdge<Bene>> iterator =  sNetwork.getEdges(this).iterator(); iterator.hasNext();) {
 							
-				// Interact here
-				Bene bene = (Bene)iterator.next();
+				// Accumulate social influence of each beneficiary whom the agent is connected to.
+				RepastEdge<Bene> b = iterator.next();
+				Bene bene = b.getSource();
+				if (bene.equals(this)){
+					
+					bene = b.getTarget();
+				}
 				this.socialInfluence = this.socialInfluence  + (bene.behavior-this.behavior);
 			}
-			this.socialInfluence = this.socialInfluence/this.sList.size();	
+			// Average social influence
+			this.socialInfluence = this.socialInfluence/sNetwork.getDegree(this);	
 		}
-		// Social Support
+		// ****************** Social Support
 		if (gNetwork.getDegree(this) > 0){
 			for(Iterator<RepastEdge<Bene>> iterator =  gNetwork.getEdges(this).iterator(); iterator.hasNext();) {
 				
+				// Accumulate social support of each beneficiary in the group network weighted with strength of tie.
 				RepastEdge<Bene> b = iterator.next();
+				Bene bene = b.getSource();
+				if (bene.equals(this)){
+					
+					bene = b.getTarget();
+				}
 				double weight = b.getWeight();
-				double behavior = b.getTarget().behavior;
+				double behavior = bene.behavior;
 				this.socialSupport = this.socialSupport + weight*behavior;	
 				// Revise strength after using it
 				b.setWeight(weight*this.weightDecay);
 			}
+			// Average social support
 			this.socialSupport = this.socialSupport/gNetwork.getDegree(this);
 		}
 
-		// Planned Behavior simple implementation
+		// ****************** Planned Behavior simple implementation
 		this.behavior = this.behavior + 0.5*(1-this.behavior)*(this.selfEfficacy*this.socialSupport+this.socialInfluence*this.susceptibility);	
-		// Seek treatment
+		// ****************** Seek treatment
 		int s = (Integer)p.getInteger("stateSympthom");
 		int d = (Integer)p.getInteger("stateDeath");
 		if (this.behavior>this.threshold&&this.health != d){

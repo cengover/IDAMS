@@ -55,6 +55,7 @@ public class ACO {
 		public BillType costType;
 		
 		public Bill(Bene patient,PCP provider, double cost, BillType cType) {
+			
 			this.pcp = provider;
 			this.cost = cost;
 			this.costType = cType;

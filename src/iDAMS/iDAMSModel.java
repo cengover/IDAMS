@@ -95,25 +95,21 @@ public class iDAMSModel implements ContextBuilder<Object>{
 				int j = RandomHelper.nextIntFromTo(1, tempList.size()-1);
 				Bene target = (Bene)tempList.get(j);
 						
-				// If selected agent is not a neighbor and itself
+				// If selected agent is not already connected
 				if (sNetwork.getEdge(source, target) == null){
 								
 					sNetwork.addEdge(source, target);
-					((Bene) source).sList.add((Bene) target);
-					((Bene) target).sList.add((Bene) source);
-					System.out.println("SOURCE "+source.id+"TARGET"+target.id);
-					System.out.println("SIZE="+tempList.size());
 					con++;
-					System.out.println("HEYYYYY "+source.id);
+					// If the number of links is satisfied for source
 					if (con == links){
 							
 						tempList.remove(source);
 					}
+					// If the number of links is satisfied for target
 					if (sNetwork.getDegree(target) == links){
 						
 						tempList.remove(target);
 					}
-					System.out.println("SIZE2="+tempList.size());
 				}							
 			}		
 		}
@@ -128,7 +124,6 @@ public class iDAMSModel implements ContextBuilder<Object>{
 			((PCP) pro).patientList.add(b);
 			b2pNetwork.addEdge(b, pro);
 			((Bene) o).pList.add((PCP) pro);
-			System.out.println("HEYYYYY2");
 		}
 	}
 }

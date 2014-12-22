@@ -53,6 +53,7 @@ public class PCP implements Provider {
 		Schedule schedule= (Schedule) RunEnvironment.getInstance().getCurrentSchedule();
 		// Get Context
 		Context context = ContextUtils.getContext(this);
+		Network<Bene> network = (Network) context.getProjection("groupNetwork");
 	    // Get parameters
 		Parameters p = RunEnvironment.getInstance().getParameters();
 		// Increment Tick Count
@@ -61,26 +62,35 @@ public class PCP implements Provider {
 		if ((Integer)p.getInteger("controlledGroup") == 1){
 			
 			// Fixed or mixed?
-			int i = Math.abs((Integer)p.getInteger("endOfSim")/(Integer)p.getInteger("meetingFrequency"));
-			if ((Integer)p.getInteger("mixed") == 0 && schedule.getTickCount() == 1){
-				
-				randomGroupNetwork();
-			}
-			if (tickCount == i){
+			int i = Math.abs((Integer)p.getInteger("endOfSim")/(Integer)p.getInteger("meetingFrequency")+1);
+			// If time is 1 or the meeting time-tick
+			if (schedule.getTickCount() == 1 || tickCount == i){
 				
 				tickCount = 0;
-				if((Integer)p.getInteger("mixed") == 1 && (Integer)p.getInteger("mixingStyle") == 1){
+				// Random Network - Assigned only one time and stays the same
+				if ((Integer)p.getInteger("mixed") == 0){
 					
-					randomGroupNetwork();
+					if (network.getDegree() == 0){
+						
+						randomGroupNetwork();
+					}			
 				}
-				else if ((Integer)p.getInteger("mixed") == 1 && (Integer)p.getInteger("mixingStyle") == 0){
+				if((Integer)p.getInteger("mixed") == 1){ 
+					// Randomly assigned at each meeting
+					if((Integer)p.getInteger("mixingStyle") == 0){
 					
-					preferedGroupNetwork();
-				}		
-			}
+						randomGroupNetwork();
+					}
+					// Best patients are distributed to different groups, rest is assigned randomly
+					if((Integer)p.getInteger("mixingStyle") == 1){
+					
+						preferedGroupNetwork();
+					}
+				}	
+			}	
 		}
-		
-		if ((Integer)p.getInteger("controlledGroup") == 0){
+			
+		if ((Integer)p.getInteger("interventions") == 1){
 		
 			// If queue is not empty - Meaning that Provider received patients
 			while (this.cList.size() > 0){
@@ -112,7 +122,7 @@ public class PCP implements Provider {
 					}			
 				}
 				
-				// Kill Bene
+				// Kill Beneficiaries at Death state 
 				if (p.getInteger("mortality")==1&&patient.health==p.getInteger("stateDeath")){
 					
 					context.remove(patient);
@@ -121,12 +131,11 @@ public class PCP implements Provider {
 				this.cList.removeFirst();
 			}
 		}
-		
 		RunEnvironment.getInstance().endAt((Integer)p.getValue("endOfSim"));	
 	}
 	
 	public class Intervention {
-		
+			
 		public PCP provider;
 		public interventionType intType;
 		
@@ -154,7 +163,7 @@ public class PCP implements Provider {
 	    Network<Bene> network = (Network) context.getProjection("groupNetwork");
 		// Get group size
 		int size = (Integer)p.getInteger("groupSize");
-		// Iterate over this tempList to connect benes - for computational benefits
+		// Create a tempList to iterate over - for computational benefits
 		LinkedList<Bene> tempList = new LinkedList<Bene>();
 		for (Iterator<Bene> iterator = this.patientList.iterator(); iterator.hasNext();) {
 			
@@ -164,12 +173,13 @@ public class PCP implements Provider {
 	    
 	    // Assign number of groups
 	    int numOfGroups = (int) Math.round((double)(this.patientList.size()/size-0.5));
-		// Count how many patients are put in a group
+		// Count variable to track how many patients are assigned in the group
 	    int t = 0;
-	    for (int t1 = 0; t1 < numOfGroups; t1++){
+	    // For each group
+	    for (int n = 0; n < numOfGroups; n++){
 		    
 	    	LinkedList<Bene> gList = new LinkedList<Bene>();
-		    // Select patients until count is equal to group size
+		    // Select patients from tempList until the count is equal to group size
 	    	while (t < size){
 	    		int source = RandomHelper.nextIntFromTo(0, tempList.size()-1);
 				Bene o = (Bene) tempList.get(source);
@@ -177,6 +187,7 @@ public class PCP implements Provider {
 				tempList.remove(source);
 				t++;
 			}
+	    	// Connect selected group members
 			for (int i = 0; i < size; i++) {
 
 				for (int j = i+1; j < size; j++){
@@ -185,6 +196,7 @@ public class PCP implements Provider {
 					Bene target = (Bene)gList.get(j);
 					if (network.getEdge(source, target) != null){
 						
+						// Set weight for the new tie
 						double weight = network.getEdge(source, target).getWeight();
 						network.getEdge(source, target).setWeight(1.0);
 					}
@@ -214,6 +226,7 @@ public class PCP implements Provider {
 		LinkedList<Bene> bestList = new LinkedList<Bene>();
 		double attribute = 1.0; 
 		int index = 0;
+		// Find best patients in terms of an attribute
 		for (Iterator<Bene> iterator = this.patientList.iterator(); iterator.hasNext();) {
 			
 			Bene bene = (Bene)iterator.next();
@@ -226,43 +239,39 @@ public class PCP implements Provider {
 				Bene b = new Bene(1);
 				for (Iterator<Bene> it = bestList.iterator(); it.hasNext();) {
 					
-					b = (Bene)it.next();	
+					b = (Bene)it.next();
+					// Attribute is behavior here. Higher values indicate healthier behavior!
 					if (b.behavior < attribute){
 
 						attribute = b.behavior;	
 						index = bestList.indexOf(b);
 					}
 				}
-				
 				if (bene.behavior > attribute){
 					
-					attribute = 1;
+					attribute = 0.0;
 					bestList.remove(index);
 					bestList.add(bene);
 				}
 			}
 		}
 		
-		for (Iterator<Bene> iterator = bestList.iterator(); iterator.hasNext();) {
-			
-			Bene bene = (Bene)iterator.next();
-			System.out.println("IDBEST = "+bene.id+"Behavior"+bene.behavior);
-		}
-		
-		// Iterate over this tempList to connect benes - for computational benefits
+		// Create a tempList to iterate over - for computational benefits
 		for (Iterator<Bene> iterator = this.patientList.iterator(); iterator.hasNext();) {
 			
 			Bene bene = (Bene)iterator.next();
 			tempList.add(bene);
-			System.out.println("ID = "+bene.id+"Behavior"+bene.behavior);
 		}
-		// Count how many patients are put in a group
+		// Count variable to track how many patients are assigned in the group
 	    int t = 0;
-	    for (int t1 = 0; t1 < numOfGroups; t1++){
-		    LinkedList<Bene> gList = new LinkedList<Bene>();
-		    gList.add(bestList.get(t1));
+	    // For each group
+	    for (int n = 0; n < numOfGroups; n++){
+		    
+	    	LinkedList<Bene> gList = new LinkedList<Bene>();
+	    	// First add a best member
+		    gList.add(bestList.get(n));
 		    t++;
-		    tempList.remove(bestList.get(t1));
+		    tempList.remove(bestList.get(n));
 		    // Select patients until count is equal to group size
 	    	while (t < size){
 	    		
@@ -272,6 +281,7 @@ public class PCP implements Provider {
 				tempList.remove(source);
 				t++;
 			}
+	    	// Connect selected group members
 			for (int i = 0; i < size; i++) {
 
 				for (int j = i+1; j < size; j++){
@@ -280,6 +290,7 @@ public class PCP implements Provider {
 					Bene target = (Bene)gList.get(j);
 					if (network.getEdge(source, target) != null){
 						
+						// Set weight for the new tie
 						double weight = network.getEdge(source, target).getWeight();
 						network.getEdge(source, target).setWeight(1.0);
 					}
