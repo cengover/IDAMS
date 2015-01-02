@@ -49,7 +49,7 @@ public class Bene {
 		}
 		
 		this.visits = 0;
-		//Threshold for seeking treatment
+		// Threshold for seeking treatment
 		this.threshold = RandomHelper.nextDoubleFromTo((Double)p.getDouble("min_threshold"),(Double)p.getDouble("max_threshold"));
 		this.pList = new LinkedList<PCP>(); //Provider List
 		this.interventionList = new LinkedList<Intervention>();
@@ -113,7 +113,7 @@ public class Bene {
 		if (gNetwork.getDegree(this) > 0){
 			for(Iterator<RepastEdge<Bene>> iterator =  gNetwork.getEdges(this).iterator(); iterator.hasNext();) {
 				
-				// Accumulate social support of each beneficiary in the group network weighted with strength of tie.
+				// Accumulate social support of each beneficiary in the group network weighted with strength of the tie.
 				RepastEdge<Bene> b = iterator.next();
 				Bene bene = b.getSource();
 				if (bene.equals(this)){
@@ -121,7 +121,7 @@ public class Bene {
 					bene = b.getTarget();
 				}
 				double weight = b.getWeight();
-				double behavior = bene.behavior;
+				double behavior = bene.behavior-this.behavior;
 				this.socialSupport = this.socialSupport + weight*behavior;	
 				// Revise strength after using it
 				b.setWeight(weight*this.weightDecay);
@@ -131,7 +131,8 @@ public class Bene {
 		}
 
 		// ****************** Planned Behavior simple implementation
-		this.behavior = this.behavior + 0.5*(1-this.behavior)*(this.selfEfficacy*this.socialSupport+this.socialInfluence*this.susceptibility);	
+		//this.behavior = this.behavior + 0.5*(1-this.behavior)*(this.selfEfficacy*this.socialSupport+this.socialInfluence*this.susceptibility);	
+		this.behavior = this.behavior + (1-this.behavior)*(this.selfEfficacy*this.socialSupport);
 		// ****************** Seek treatment
 		int s = (Integer)p.getInteger("stateSympthom");
 		int d = (Integer)p.getInteger("stateDeath");

@@ -5,7 +5,7 @@
 	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="100" /> 
 	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="3" />
 	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="1" />
-	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="5" />
+	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="0" />
 	<parameter name="numOfPCPs" displayName="Number of Providers" type="int" defaultValue="1" />
 	<parameter name="endOfSim" displayName="Terminating Time tick" type="int" defaultValue="200" />
 	<parameter name="interventions" displayName="Interventions exist?" type="int" defaultValue="0" />
