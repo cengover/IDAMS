@@ -1,26 +1,26 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Total Cost</name>
+  <name>Offline Cost</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>10.0</interval>
+    <interval>5.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>27269484</hashCode>
+    <hashCode>-58852826</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Total Cost</string>
+      <string>Offline</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Total Cost</id>
+        <id>Offline</id>
         <className>iDAMS.ACO</className>
-        <methodName>getCost</methodName>
+        <methodName>getOfflineCost</methodName>
         <aggType>MAX</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>

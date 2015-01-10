@@ -1,27 +1,27 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Avg Health</name>
-  <type>AGGREGATE</type>
+  <name>Behavior per person start</name>
+  <type>NON_AGGREGATE</type>
+  <sourceType>iDAMS.Bene</sourceType>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>1.0</interval>
+    <interval>0.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
-    <frequency>REPEAT</frequency>
-    <hashCode>-1612557706</hashCode>
+    <frequency>ONE_TIME</frequency>
+    <hashCode>-1983033654</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>AvgHealth</string>
+      <string>Behavior</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>AvgHealth</id>
+        <id>Behavior</id>
         <className>iDAMS.Bene</className>
-        <methodName>getHealth</methodName>
-        <aggType>MEAN</aggType>
+        <methodName>getBehavior</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

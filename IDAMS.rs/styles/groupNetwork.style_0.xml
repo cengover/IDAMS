@@ -1,9 +1,10 @@
 <repast.simphony.visualization.editedStyle.DefaultEditedEdgeStyleData3D>
   <lineStyle>SOLID</lineStyle>
   <size>0.2</size>
-  <sizeMax>1.0</sizeMax>
+  <sizeMax>10.0</sizeMax>
   <sizeMin>0.0</sizeMin>
-  <sizeScale>1.0</sizeScale>
+  <sizeScale>2.0</sizeScale>
+  <sizeMethodName>getWeight</sizeMethodName>
   <color>
     <float>1.0</float>
     <float>1.0</float>

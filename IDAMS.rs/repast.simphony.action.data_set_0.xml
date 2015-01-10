@@ -1,27 +1,27 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Care Cost</name>
+  <name>Avg Behavior</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>5.0</interval>
+    <interval>1.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1478945138</hashCode>
+    <hashCode>-391510810</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>CareCost</string>
+      <string>Behavior</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>CareCost</id>
-        <className>iDAMS.ACO</className>
-        <methodName>getVisitCost</methodName>
-        <aggType>SUM</aggType>
+        <id>Behavior</id>
+        <className>iDAMS.Bene</className>
+        <methodName>getBehavior</methodName>
+        <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Online Cost</name>
+  <name>Onsite</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -16,12 +16,12 @@
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Online</string>
+      <string>Onsite</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Online</id>
+        <id>Onsite</id>
         <className>iDAMS.ACO</className>
-        <methodName>getOnlineCost</methodName>
-        <aggType>SUM</aggType>
+        <methodName>getOnsiteCost</methodName>
+        <aggType>MAX</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

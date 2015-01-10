@@ -1,27 +1,27 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Behavior per person start</name>
+  <name>Mortality</name>
   <type>NON_AGGREGATE</type>
-  <sourceType>iDAMS.Bene</sourceType>
+  <sourceType>iDAMS.PCP</sourceType>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>0.0</interval>
+    <interval>1.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
-    <frequency>ONE_TIME</frequency>
-    <hashCode>-1983033654</hashCode>
+    <frequency>REPEAT</frequency>
+    <hashCode>-1366676117</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Behavior</string>
+      <string>MortalityCount</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Behavior</id>
-        <className>iDAMS.Bene</className>
-        <methodName>getBehavior</methodName>
+        <id>MortalityCount</id>
+        <className>iDAMS.PCP</className>
+        <methodName>getMortalityCount</methodName>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>
