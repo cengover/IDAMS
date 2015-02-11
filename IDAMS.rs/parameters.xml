@@ -5,7 +5,7 @@
 	<parameter name="numOfBenes" displayName="Number of Benes" type="int" defaultValue="100" /> 
 	<parameter name="width" displayName="Width of Grid" type="int" defaultValue="3" />
 	<parameter name="height" displayName="Height of Grid" type="int" defaultValue="1" />
-	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="1" />
+	<parameter name="numOfLinks" displayName="Number of Connections" type="int" defaultValue="5" />
 	<parameter name="numOfPCPs" displayName="Number of Providers" type="int" defaultValue="1" />
 	<parameter name="endOfSim" displayName="Terminating Time tick" type="int" defaultValue="200" />
 	<parameter name="interventions" displayName="Interventions exist?" type="int" defaultValue="0" />
@@ -29,9 +29,9 @@
 	<parameter name="controlledGroup" displayName="Controlled Group?" type="int" defaultValue="1" />
 	<parameter name="mixed" displayName="Mixed Groups?" type="int" defaultValue="0" />
 	<parameter name="mixingStyle" displayName="Mixing Style" type="int" defaultValue="0" />
-	<parameter name="groupSize" displayName="SMA Group Size" type="int" defaultValue="10" />
-	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="2" />
-	<parameter name="IniHealthBehDist" displayName="Initial Behavior Distribution" type="int" defaultValue="0" />
+	<parameter name="groupSize" displayName="SMA Group Size" type="int" defaultValue="20" />
+	<parameter name="meetingFrequency" displayName="SMA Meeting Frequency" type="int" defaultValue="3" />
+	<parameter name="IniHealthBehDist" displayName="Initial Behavior Distribution" type="int" defaultValue="1" />
 	<parameter name="betaAlpha" displayName="BetaDist Alpha" type="double" defaultValue="0.5" />
 	<parameter name="betaBeta" displayName="BetaDist Beta" type="double" defaultValue="0.5" />
 

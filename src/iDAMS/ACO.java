@@ -41,7 +41,7 @@ public class ACO {
 		this.visit_cost = (Double)p.getDouble("visit_cost");
 		int dimension = (Integer)p.getInteger("stateDeath");
 		stateTransitions = new double[dimension+1][dimension+1];
-		// Read the dimensions here from a file
+		// Read the dimensions here from a file -- To be implemented
 		stateTransitions[0][1] = RandomHelper.nextDoubleFromTo(0, 1);
 		stateTransitions[1][2] = RandomHelper.nextDoubleFromTo(0, 1);
 		stateTransitions[2][3] = RandomHelper.nextDoubleFromTo(0, 1);

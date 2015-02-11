@@ -73,7 +73,13 @@ public class PCP implements Provider {
 					if (network.getDegree() == 0){
 						
 						randomGroupNetwork();
-					}			
+					}
+					for(Iterator<RepastEdge<Bene>> iterator =  network.getEdges().iterator(); iterator.hasNext();) {
+						
+						// Accumulate social support of each beneficiary in the group network weighted with strength of the tie.
+						RepastEdge<Bene> b = iterator.next();
+						b.setWeight(1.0);
+					}
 				}
 				if((Integer)p.getInteger("mixed") == 1){ 
 					// Randomly assigned at each meeting
@@ -204,7 +210,7 @@ public class PCP implements Provider {
 						
 						network.addEdge(source, target,1.0);
 					}
-				}		
+				}
 			}
 			t = 0;
 	    }	

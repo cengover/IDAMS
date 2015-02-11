@@ -1,7 +1,6 @@
 package iDAMS;
 
 import java.util.LinkedList;
-
 import repast.simphony.context.Context;
 import repast.simphony.context.space.graph.NetworkFactoryFinder;
 import repast.simphony.context.space.grid.GridFactoryFinder;

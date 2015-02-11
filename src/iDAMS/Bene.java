@@ -138,7 +138,7 @@ public class Bene {
 		int d = (Integer)p.getInteger("stateDeath");
 		if (this.behavior>this.threshold&&this.health != d){
 			
-			if(this.health>=s && pList.getFirst().aco.stateTransitions[this.health][this.health+1] < RandomHelper.nextDouble()){
+			if(this.health>=s && pList.getFirst().aco.stateTransitions[this.health][this.health+1] > RandomHelper.nextDouble()){
 				
 				this.health++;
 				this.pList.getFirst().cList.add(this);	
